@@ -1,0 +1,171 @@
+import mysql.connector as sql
+mycon=sql.connect(host='localhost',user='root',passwd='Albert@1884',database='main')
+if mycon.is_connected()== False:
+    print("error connecting to MySql database")
+cursor = mycon.cursor()
+
+def Everything():
+    cursor.reset()
+    cursor.execute("select * from CyberCafe;")
+    data = cursor.fetchall()
+    for row in data:
+        print(row)
+        
+def Something(N):
+    cursor.reset()
+    cursor.execute("select * from CyberCafe;")
+    data = cursor.fetchmany(N)
+    for row in data :
+        print(row)
+        
+        
+def Somethingelse(M,N):
+    cursor.reset()
+    cursor.execute("select * from CyberCafe;")
+    for k in range(M):
+        data=cursor.fetchone()
+        data = cursor.fetchmany(N)
+    for row in data :
+        print(row)
+        
+def Anything(n):
+    cursor.reset()
+    cursor.execute("select * from CyberCafe;")
+    for i in range (n):
+        data = cursor.fetchone()
+        print(data)
+        
+def Update():
+    cursor.reset()
+    while True:
+        r=int(input("Enter The Register Number: "))
+        n=input("Enter The Name: ")
+        c=input("Enter The Computer Number: ")
+        m=input("Enter The Number Of Hours: ")
+        s=input("Enter The Money to be Paid: ")
+        query1="insert into CyberCafe(Regno,Name,Compno,Time,Money)values(%s,'%s',%s,'%s','%s')" %(r,n,c,m,s)
+        cursor.execute(query1)
+        mycon.commit()
+        ch=input("Do You Want To Insert Another Record: ")
+        if ch.upper()=='N':
+            break
+        
+def Alter():
+    cursor.reset()
+    while True:
+        rno=int(input("Enter The Register No Whose Record You Want To Modify: "))
+        r=input("Enter The New Register No: ")
+        n=input("Enter The New Name: ")
+        c=input("Enter The New Computer Number: ")
+        m=input("Enter The New Number Of Hours: ")
+        s=input("Enter The New Total Money To Be Paid: ")
+        query1=("update CyberCafe set Regno=%s, Name='%s', Compno=%s, Time=%s, Money=%s where Regno=%s"%(r,n,c,m,s,rno))
+        cursor.execute(query1)
+        mycon.commit()
+        ch=input("Do You Want To Modify Another Record:")
+        if ch.upper()=='N':
+            break
+        
+def Remove():
+    cursor.reset()
+    while True:
+        r=int(input("Enter The Register Number Whose Record You Want To Delete: "))
+        cursor.execute("delete from CyberCafe where Regno=%s" %(r,))
+        mycon.commit()
+        ch=input("Do You Want To Delete Another Record{y/n}: ")
+        if ch.upper()=='N':
+            break
+        
+print("Welcome To Albert's Cyber Cafe")
+C=int(input('Are You 1. An Employee or 2. A Customer: '))
+if C==1:
+    W='y'
+    while (W=='y' or W=='Y'):
+        
+        P=int(input('Enter Password '))
+        if P==4335:
+            print('Correct Password')
+            X=int(input('Would You Like To 1. Observe The Records or 2. Modify Records '))
+            
+            if X==1:
+                print('1. Would You Like To See All The Records ')
+                print('2. Would You Like To See Records From Beginning To N Number Of Records')
+                print('3. Would You Like To See Records From N Number Of Records To The End')
+                print('4. Would You Like To See A Specific Record')
+                Y=int(input('Enter Your Choice '))
+                if Y==1:
+                    Everything()
+                    
+                elif Y==2:
+                    N=int(input('Enter The Number Of Records You Would Like To See '))
+                    Something(N)
+                    
+                elif Y==3:
+                    m=int(input('Enter The Number Of Records To Be Skipped '))
+                    n=int(input('Enter The Number Of Records To Be Displayed '))
+                    Somethingelse(m,n)
+                    
+                elif Y==4:
+                    n=int(input('Enter The Regno Which Has To Be Displayed '))
+                    Anything(n)
+                    
+                else:
+                    print('Invalid Choice')
+                    
+            elif X==2:
+                print('1. Would You Like To Add A Record')
+                print('2. Would You Like To Change A Selected Record')
+                print('3. Would You Like To Remove A Selected Record')
+                Y=int(input('Enter Your Choice '))
+                if Y==1:
+                    Update()
+                    Everything()
+                    
+                elif Y==2:
+                    Alter()
+                    Everything()
+                    
+                elif Y==3:
+                    Remove()
+                    Everything()
+    
+                else:
+                    print('Invalid Choice')
+            else:
+                print('Invalid Choice')
+        else:
+            print('Incorrect Password')
+        W=input("Do You Want To Continue (Y/y or N/n):? ")
+    print("Thank You For Coming To Albert's Cyber Cafe And We Hope You Come Back Soon")
+
+elif C==2:
+    W='y'
+    while (W=='y' or W=='Y'):
+        print('1. Would You Like To See All The Records ')
+        print('2. Would You Like To See Records From Beginning To N Number Of Records')
+        print('3. Would You Like To See Records From N Number Of Records To The End')
+        print('4. Would You Like To See A Specific Record')
+        Y=int(input('Enter Your Choice '))
+        if Y==1:
+            Everything()
+            
+        elif Y==2:
+            N=int(input('Enter The Number Of Records You Would Like To See '))
+            Something(N)
+            
+        elif Y==3:
+            m=int(input('Enter The Number Of Records To Be Skipped '))
+            n=int(input('Enter The Number Of Records To Be Displayed '))
+            Somethingelse(m,n)
+            
+        elif Y==4:
+            n=int(input('Enter The Register Number Which Has To Be Displayed '))
+            Anything(n)
+            
+        else:
+            print('Invalid Choice')
+            
+        W=input("Do You Want To Continue (Y/y or N/n):? ")
+    print("Thank You For Coming To Albert's Cyber Cafe And We Hope You Come Back Soon")
+else:
+    print('Invalid Choice')
